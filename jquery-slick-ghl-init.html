@@ -52,29 +52,29 @@
         $('.jm-slide').each(function () {
           const $slide = $(this);
           const $textContainer = $slide.find('.jm-wrap'); // Target the text container
-          const $ellipsis = $slide.find('.jm-ellipsis');
-          const $chevron = $slide.find('.jm-chevron');
+          const $ellipsis = $slide.find('.cts-expand');
+          const $chevron = $slide.find('.cts-collapse');
 
           // Hide chevron initially
           $chevron.hide();
 
           // Check if content overflows
           if ($textContainer.length > 0) { // Check if we actually found a .jm-wrap element
-            if ($textContainer[0].scrollHeight > getHeightFromClass('.jm-collapsed')) {
+            if ($textContainer[0].scrollHeight > getHeightFromClass('.cts-collapsed')) {
               $ellipsis.show();
-              $($textContainer[0]).addClass('jm-collapsed');// Show ellipsis if content overflows
+              $($textContainer[0]).addClass('cts-collapsed');// Show ellipsis if content overflows
             } else {
               $ellipsis.hide(); // Hide ellipsis if content fits
-              $($textContainer[0]).addClass('jm-expanded');
+              $($textContainer[0]).addClass('cts-expanded');
             }
           }
         });
 
         // Handle toggle click
-        $(document).on('click', '.jm-ellipsis, .jm-chevron', function () {
+        $(document).on('click', '.cts-expand, .cts-collapse', function () {
           const $jmslide = $(this).closest('.jm-slide');
-          const $ellipsis = $jmslide.find('.jm-ellipsis');
-          const $chevron = $jmslide.find('.jm-chevron');
+          const $ellipsis = $jmslide.find('.cts-expand');
+          const $chevron = $jmslide.find('.cts-collapse');
           const $wrap = $jmslide.find('.jm-wrap');
 
           // Toggle visibility
@@ -82,7 +82,7 @@
           $chevron.toggle();
 
           // Toggle classes
-          $wrap.toggleClass('jm-collapsed jm-expanded');
+          $wrap.toggleClass('cts-collapsed cts-expanded');
         });
       });
 
