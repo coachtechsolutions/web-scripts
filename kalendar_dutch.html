@@ -1,0 +1,265 @@
+<script>
+// if you like the script, you may consider some tip on this link:
+// https://buy.stripe.com/28o29r4RHefu1Wg8ww
+// Thanks :)
+const translationMap = {
+    "January": "Januari", 
+    "February": "Februari", 
+    "March": "Maart", 
+    "April": "April", 
+    "May": "Mei", 
+    "June": "Juni", 
+    "July": "Juli", 
+    "August": "Augustus", 
+    "September": "September", 
+    "October": "Oktober", 
+    "November": "November", 
+    "December": "December",
+    "Jan": "Jan", 
+    "Feb": "Feb", 
+    "Mar": "Maa", 
+    "Apr": "Apr", 
+    "May": "Mei", 
+    "Jun": "Jun", 
+    "Jul": "Jul", 
+    "Aug": "Aug", 
+    "Sep": "Sep",
+    "Oct": "Okt", 
+    "Nov": "Nov", 
+    "Dec": "Dec",
+    "Mon": "Ma", 
+    "Tue": "Di", 
+    "Wed": "Wo", 
+    "Thu": "Do", 
+    "Fri": "Vr", 
+    "Sat": "Za", 
+    "Sun": "Zo",
+    "Monday": "Maandag", 
+    "Tuesday": "Dinsdag", 
+    "Wednesday": "Woensdag", 
+    "Thursday": "Donderdag", 
+    "Friday": "Vrijdag", 
+    "Saturday": "Zaterdag", 
+    "Sunday": "Zondag",
+    "AM": "VM",
+    "PM": "NM",
+    "Additional Information": "Aanvullende informatie",
+    "Available Starting times for": "Beschikbare starttijden voor ",
+    "Book Appointment": "Afspraak boeken",
+    "Choose Time Slot": "Kies een tijdslot",
+    "Enter Details": "Vul gegevens in",
+    "First Name": "Voornaam",
+    "First Name is required": "Voornaam is verplicht",
+    "Last Name": "Achternaam",
+    "Last Name is required": "Achternaam is verplicht",
+    "No Slots available": "Geen beschikbare tijdsloten",
+    "Phone": "Telefoon",
+    "Phone is required": "Telefoonnummer is verplicht",
+    "Email is required": "E-mailadres is verplicht",
+    "Please accept the terms and conditions": "Accepteer de algemene voorwaarden",
+    "Select": "Selecteren",
+    "Mins": "minuten",
+    "Minutes": "minuten",
+    "Select Date": "Selecteer datum",
+    "Select time": "Selecteer tijd",
+    "Select Date & Time": "Selecteer datum en tijd",
+    "Skip": "Overslaan",
+    "Submit": "Verzenden",
+    "Pick a Date and Time": "Kies een datum en tijd",
+    "Time zone": "Tijdzone",
+    "Additional_Info": "Is er iets dat ik van tevoren moet weten?", // this is the placeholder text in the textbox labeled Additional Information
+    "Your Meeting has been Scheduled": "Uw afspraak is gepland",
+    "Calendar": "Kalender",
+    "Duration": "Duur",
+    "Any Available": "Iedereen beschikbaar",
+    "Load More": "Meer laden",
+    "Add to": "Toevoegen aan",
+};
+
+
+const selectors = [
+    'h3.cal-title',
+    'a.load-more',
+    'div.details-item-step2 h3',
+    'h3 strong',
+    'div.pick-hours--am h4',
+    'div.pick-hours--am p',
+    'div.pick-hours--pm h4',
+    'div.pick-hours--pm p',
+    'h4.label-select-date',
+    'h4.text-info',
+    '.timezone-label',
+    'thead tr th span',
+    'div.booking-info-value',
+    'div.booking-info-value span',
+    'button',
+    'button div',
+    'li.widgets-time-slot span',
+    '.selected-day',
+    '.selected-date',
+    'div.selected-appointment-date span',
+    'label',
+    'textarea[name="calendar_notes"]',
+    'textarea.form-control',
+    '.error',
+    'h5.confirmation-message',
+    'a.add-calendar-button',
+    'span.multiselect__single',
+    '.field-container div input',
+    'div.calendar-details-container div span span',
+    'a.calendar-button span',
+];
+
+const regexTranslationMap = [
+    {
+        regex: /\b(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (\w+) (\d{1,2}), (\d{4})\b/,
+        replacement: (match, day, month, date, year) => {
+            const dayTranslation = translationMap[day]|| day;
+            const monthTranslation = translationMap[month] || month;
+            return `${dayTranslation}, ${monthTranslation} ${date}, ${year}`;
+        }
+    },
+    {
+        // Matches time range format: 05:00 PM - 05:30 PM
+        regex: /(\d{1,2}:\d{2}) (AM|PM) - (\d{1,2}:\d{2}) (AM|PM)/,
+        replacement: (match, startTime, startPeriod, endTime, endPeriod) => {
+            const startPeriodTranslation = translationMap[startPeriod] || startPeriod;
+            const endPeriodTranslation = translationMap[endPeriod] || endPeriod;
+            return `${startTime} ${startPeriodTranslation} - ${endTime} ${endPeriodTranslation}`;
+        }
+    },
+    {
+        regex: /(\d{1,2}:\d{2}) (AM|PM)/,
+        replacement: (match, time, period) => {
+            const periodTranslation = translationMap[period]||period;
+            return `${time} ${periodTranslation}`;
+        }
+    },
+    {
+        regex: /(Duration) (.*)/,
+        replacement: (match, duration, theRest) => {
+            const durationTranslate=translationMap[duration]||duration;
+            return `${durationTranslate} ${theRest}`;
+        }
+    },
+    {
+        regex: /(\d{1,2}) Mins/,
+        replacement: (match, minutes) => `${minutes} ${translationMap["Mins"]||"Mins"}`
+    },
+    {
+        regex: /(\d{1,2}) Minutes/,
+        replacement: (match, minutes) => `${minutes} ${translationMap["Minutes"]||"Minutes"}`
+    },
+    {
+        regex: /^(\w+) (\d{1,2},) (\d{4})/,
+        replacement: (match, month, day, year) => {
+            const monthTranslation = translationMap[month]||month;
+            return `${monthTranslation} ${day} ${year}`;
+        }
+    },
+    {
+        regex: /(\w+) (\d{4})/,
+        replacement: (match, month, year) => {
+            const monthTranslation = translationMap[month]||month;
+            return `${monthTranslation} ${year}`;
+        }
+    },
+    {
+        regex: /(\bAdd to) (.*)/,
+        replacement: (match, addTo, theRest) => {
+            const addToTranslation = translationMap[addTo]||addTo;
+            return `${addToTranslation} ${theRest}`;
+        }
+    },
+    {
+        regex: /(\w) (Calendar)/,
+        replacement: (match, provider, calendar) => {
+            const calendarTranslation = translationMap[calendar]||calendar;
+            return `${provider} ${calendarTranslation}`;
+        }
+    }
+];
+
+var pkdebug=false;
+const translateOrReplaceNode = (node) => {
+    if (!node) return;  
+
+    // Skip nodes that have already been translated
+    //if (node.getAttribute && node.getAttribute('data-translated') === 'true') return;
+    if (pkdebug){
+        debugger;
+        pkdebug=false;
+    }
+    if (node.childNodes && node.childNodes.length > 0) {
+        node.childNodes.forEach(child => {
+            if (child.nodeType === 3) {  // Check if the node is a text node
+                let text = child.nodeValue.trim();
+
+                // Check for static translation
+                if (translationMap[text]) {
+                    if (child.nodeValue !== translationMap[text]) {
+                        child.nodeValue = translationMap[text];
+                    }
+                } else {
+                    // Check for regex-based dynamic translation
+                    for (const { regex, replacement } of regexTranslationMap) {
+                        text = child.nodeValue;
+                        if (regex.test(text)) {
+                            rText=text.replace(regex, replacement);
+                            if(rText!==child.nodeValue) {
+                                child.nodeValue = rText;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+    } else if (node.nodeName === "INPUT") {
+        const origText = node.placeholder.trim();
+
+        // Check for static translation
+        if (translationMap[origText]) {
+            node.placeholder = translationMap[origText];
+        } else {
+            // Check for regex-based dynamic translation
+            for (const { regex, replacement } of regexTranslationMap) {
+                if (regex.test(origText)) {
+                    node.placeholder = origText.replace(regex, replacement);
+                    break;
+                }
+            }
+        }
+    } else if (node.nodeName === "TEXTAREA") {
+        node.placeholder = translationMap["Additional_Info"];
+    }
+
+    // Mark node as translated to prevent future re-processing
+    /*if (node.setAttribute) {
+        node.setAttribute('data-translated', 'true');
+    }*/
+};
+
+const applyTranslations = () => {
+    selectors.forEach(selector => {
+        document.querySelectorAll(selector).forEach(translateOrReplaceNode);
+    });
+};
+
+const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+        // Process only when a mutation happens
+        applyTranslations();
+    });
+});
+
+const checkForElement = setInterval(() => {
+    let appElement = document.querySelector('#appointment_widgets--revamp') || document.querySelector('#hl_widget');
+    
+    if (appElement) {
+        clearInterval(checkForElement);
+        applyTranslations();
+        observer.observe(appElement, { childList: true, subtree: true, characterData: true });
+    }
+}, 50);
+</script>

@@ -1,0 +1,148 @@
+<script defer>
+  // Debug mode toggle
+  const DEBUG_MODE = true;
+
+  // Debug logging function
+  function debugLog(message, ...optionalParams) {
+    if (DEBUG_MODE) {
+      console.log(message, ...optionalParams);
+    }
+  }
+
+  function getHeightFromClass(className) {
+    // Create a temporary element
+    const tempElement = $('<div>')
+      .addClass(className)
+      .css({
+        position: 'absolute', // Ensure it's not visible
+        visibility: 'hidden', // Prevent it from affecting the layout
+      })
+      .appendTo('body'); // Add to the DOM
+
+    // Get the height
+    const height = tempElement.innerHeight();
+
+    // Remove the temporary element
+    tempElement.remove();
+
+    return height;
+  }
+
+  function initSliderWhenReady() {
+    // Check if jQuery is loaded
+    if (typeof jQuery !== 'function') {
+      debugLog('jQuery not loaded yet. Retrying...');
+      setTimeout(initSliderWhenReady, 100); // Retry after 100ms
+      return;
+    } else {
+      debugLog('jQuery is ready.');
+    }
+
+    // Check if Slick is loaded
+    if (typeof jQuery.fn.slick !== 'function') {
+      debugLog('Slick not loaded yet. Retrying...');
+      setTimeout(initSliderWhenReady, 100); // Retry after 100ms
+      return;
+    }
+    debugLog('Slick is ready.');
+
+    jQuery(document).ready(function ($) {
+      $(document).ready(function () {
+        // Initialize slides
+        $('.jm-slide').each(function () {
+          const $slide = $(this);
+          const $textContainer = $slide.find('.jm-wrap'); // Target the text container
+          const $ellipsis = $slide.find('.jm-ellipsis');
+          const $chevron = $slide.find('.jm-chevron');
+
+          // Hide chevron initially
+          $chevron.hide();
+
+          // Check if content overflows
+          if ($textContainer.length > 0) { // Check if we actually found a .jm-wrap element
+            if ($textContainer[0].scrollHeight > getHeightFromClass('.jm-collapsed')) {
+              $ellipsis.show();
+              $($textContainer[0]).addClass('jm-collapsed');// Show ellipsis if content overflows
+            } else {
+              $ellipsis.hide(); // Hide ellipsis if content fits
+              $($textContainer[0]).addClass('jm-expanded');
+            }
+          }
+        });
+
+        // Handle toggle click
+        $(document).on('click', '.jm-ellipsis, .jm-chevron', function () {
+          const $jmslide = $(this).closest('.jm-slide');
+          const $ellipsis = $jmslide.find('.jm-ellipsis');
+          const $chevron = $jmslide.find('.jm-chevron');
+          const $wrap = $jmslide.find('.jm-wrap');
+
+          // Toggle visibility
+          $ellipsis.toggle();
+          $chevron.toggle();
+
+          // Toggle classes
+          $wrap.toggleClass('jm-collapsed jm-expanded');
+        });
+      });
+
+      debugLog('Slick Slider is initializing...');
+      var $row = $('.slick-row');
+
+      // Move all `.c-column` elements out of `.inner` and into `.slick-row`
+      $row.find('.inner .c-column').each(function () {
+        debugLog('Moving column:', $(this)[0].outerHTML);
+
+        // Wrap `.c-column` inside `.slick-slide`
+        var wrapped = $(this).wrap('<div class="slick-slide"></div>').parent();
+
+        // Move the `.slick-slide` (wrapper) to `.slick-row`
+        wrapped.appendTo($row);
+      });
+
+      // Remove the now-empty `.inner` container
+      if ($row.find('> .inner').length > 0) {
+        debugLog('Removing .inner containers');
+        $row.find('> .inner').remove();
+      }
+
+      // Initialize Slick Slider
+      try {
+        $row.on('init', function (event, slick) {
+          debugLog('Slick initialized with settings:', slick.options);
+        });
+
+        $row.slick({
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          infinite: true, // Enable infinite scrolling
+          dots: true,
+          arrows: true,
+          autoplay: true, // Enable autoplay
+          autoplaySpeed: 3000,
+          responsive: [
+            {
+              breakpoint: 1024,
+              settings: {
+                slidesToShow: 2,
+                slidesToScroll: 1,
+              },
+            },
+            {
+              breakpoint: 768,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+              },
+            },
+          ],
+        });
+      } catch (error) {
+        console.error('Error initializing Slick:', error);
+      }
+    });
+  }
+
+  // Start the initialization process
+  initSliderWhenReady();
+</script>
