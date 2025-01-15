@@ -78,7 +78,7 @@
                 helpHeight += $(this).outerHeight(true); // Include margins
             });
 
-            let wrapHeight = getHeightFromClass('cts-slide') - maxHeightAligned - helpHeight;
+            let wrapHeight = getHeightFromClass('cts-slide-height') - maxHeightAligned - helpHeight;
             if(wrapHeight<50){
                 wrapHeight=50;
             }
