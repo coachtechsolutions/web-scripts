@@ -126,11 +126,9 @@
                 $(this).remove();
             });
             // Replace the first row with the modified clone
-            $rows.first().replaceWith($row);  
-            debugger;   
+            $rows.first().replaceWith($row);    
         }
         const $slickRow=$('.slick-row');
-        debugger;
         // Initialize Slick Slider
         try {
             $slickRow.on('init', (event, slick) => {
