@@ -52,19 +52,19 @@
         $('.jm-slide').each(function () {
           const $slide = $(this);
           const $textContainer = $slide.find('.jm-wrap'); // Target the text container
-          const $ellipsis = $slide.find('.cts-expand');
-          const $chevron = $slide.find('.cts-collapse');
+          const $expand = $slide.find('.cts-expand');
+          const $collapse = $slide.find('.cts-collapse');
 
-          // Hide chevron initially
-          $chevron.hide();
+          // Hide collapse initially
+          $collapse.hide();
 
           // Check if content overflows
           if ($textContainer.length > 0) { // Check if we actually found a .jm-wrap element
             if ($textContainer[0].scrollHeight > getHeightFromClass('.cts-collapsed')) {
-              $ellipsis.show();
+              $expand.show();
               $($textContainer[0]).addClass('cts-collapsed');// Show ellipsis if content overflows
             } else {
-              $ellipsis.hide(); // Hide ellipsis if content fits
+              $expand.hide(); // Hide ellipsis if content fits
               $($textContainer[0]).addClass('cts-expanded');
             }
           }
