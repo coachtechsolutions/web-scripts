@@ -113,9 +113,6 @@
 
             // Remove all but the first row
             $rows.slice(1).each(function () {
-                // Remove the row itself
-                $(this).remove();
-
                 // Also remove comments immediately before and after this row
                 const previousSibling = this.previousSibling;
                 const nextSibling = this.nextSibling;
@@ -126,6 +123,7 @@
                 if (nextSibling && nextSibling.nodeType === Node.COMMENT_NODE) {
                     nextSibling.remove();
                 }
+                $(this).remove();
             });
             // Replace the first row with the modified clone
             $rows.first().replaceWith($row);  
