@@ -19,6 +19,15 @@
         document.head.appendChild(script);
     }
 
+    function getHeightFromClass(className, outer = false) {
+        const $tempElement = $('<div>')
+            .addClass(className)
+            .css({ position: 'absolute', visibility: 'hidden' })
+            .appendTo('body');
+        const height = outer ? $tempElement.outerHeight() : $tempElement.innerHeight();
+        $tempElement.remove();
+        return height;
+    }
     /**
      * Initialize toggle functionality for expanding and collapsing content.
      */
@@ -69,7 +78,7 @@
                 helpHeight += $(this).outerHeight(true); // Include margins
             });
 
-            const wrapHeight = $slide.innerHeight() - maxHeightAligned - helpHeight;
+            const wrapHeight = getHeightFromClass('cts-slide') - maxHeightAligned - helpHeight;
 
             if ($textContainer.length > 0) {
                 debugLog('Height #', count++, ':', wrapHeight, ' ScrollHeight:', $textContainer[0].scrollHeight);
