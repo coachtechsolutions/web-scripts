@@ -118,7 +118,7 @@
                 });
             });
             $targetRow.find('> .inner').remove();
-            $('.click-row').hide();
+            $('.slick-row').hide();
         }
         // Initialize Slick Slider
         try {
