@@ -130,6 +130,7 @@
                 $targetRow.attr('data-visible-slides', slick.options.slidesToShow);
             });
             $targetRow.slick({
+                slide:'.slick-slide',
                 slidesToShow: 3,
                 slidesToScroll: 1,
                 infinite: true,
