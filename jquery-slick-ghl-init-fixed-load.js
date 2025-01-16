@@ -104,7 +104,7 @@
     function initializeSlickSlider() {
         debugLog('Slick Slider is initializing...');
         const $rows = $('.slick-row');
-        const $targetRow = ('.slick-target');
+        const $targetRow = $('.slick-target');
         if ($rows.length > 0) {    
             // Iterate through all rows and collect `.c-column` elements
             $rows.each(function (rowIndex) {
