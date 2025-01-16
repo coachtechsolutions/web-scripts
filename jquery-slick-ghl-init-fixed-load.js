@@ -60,6 +60,7 @@
                 sumHeight += $(this).outerHeight(true); // Include margins
             });
             maxHeightAligned = Math.max(maxHeightAligned, sumHeight);
+            debugLog('MaxHeightAligned: ',maxHeightAligned);
             $align.css("height",`${maxHeightAligned}px`);
         });
 
