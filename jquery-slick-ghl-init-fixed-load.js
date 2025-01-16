@@ -60,6 +60,7 @@
                 sumHeight += $(this).outerHeight(true); // Include margins
             });
             maxHeightAligned = Math.max(maxHeightAligned, sumHeight);
+            $align.css("height",`${maxHeightAligned}px`);
         });
 
         // Adjust slides based on calculated height
