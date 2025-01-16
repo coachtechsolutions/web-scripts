@@ -104,13 +104,8 @@
     function initializeSlickSlider() {
         debugLog('Slick Slider is initializing...');
         const $rows = $('.slick-row');
-
-        if ($rows.length > 0) {
-            // Clone the first row
-            let $row = $rows.first().clone();
-
-            // Clear the contents of the clone
-            $row.empty();
+        const $targetRow = ('.slick-target');
+        if ($rows.length > 0) {    
             // Iterate through all rows and collect `.c-column` elements
             $rows.each(function (rowIndex) {
                 const $currentRow = $(this);
@@ -119,38 +114,22 @@
                 $currentRow.find('.inner .c-column').each(function () {
                     debugLog(`Processing row ${rowIndex + 1}, column ${columnIndex++}`, $(this)[0]);
                     const wrapped = $(this).wrap('<div class="slick-slide"></div>').parent();
-                    $row.append(wrapped);
+                    $targetRow.append(wrapped);
                 });
             });
-
-            // Remove all but the first row
-            $rows.slice(1).each(function () {
-                // Also remove comments immediately before and after this row
-                const previousSibling = this.previousSibling;
-                const nextSibling = this.nextSibling;
-
-                if (previousSibling && previousSibling.nodeType === Node.COMMENT_NODE) {
-                    previousSibling.remove();
-                }
-                if (nextSibling && nextSibling.nodeType === Node.COMMENT_NODE) {
-                    nextSibling.remove();
-                }
-                $(this).remove();
-            });
-            // Replace the first row with the modified clone
-            $rows.first().replaceWith($row);    
+            $targetRow.find('> .inner').remove();
+            $('.click-row').hide();
         }
-        const $slickRow=$('.slick-row');
         // Initialize Slick Slider
         try {
-            $slickRow.on('init', (event, slick) => {
+            $targetRow.on('init', (event, slick) => {
                 debugLog('Slick initialized with settings:', slick.options);
                 initializeSlides();
             });
-            $slickRow.on('setPosition', (event, slick) => {
-                $slickRow.attr('data-visible-slides', slick.options.slidesToShow);
+            $targetRow.on('setPosition', (event, slick) => {
+                $targetRow.attr('data-visible-slides', slick.options.slidesToShow);
             });
-            $slickRow.slick({
+            $targetRow.slick({
                 slidesToShow: 3,
                 slidesToScroll: 1,
                 infinite: true,
