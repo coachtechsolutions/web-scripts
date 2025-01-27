@@ -1,3 +1,4 @@
+<script>
 // if you like the script, you may consider some tip on this link:
 // Thanks :)
 const translationMap = {
@@ -63,7 +64,6 @@ const translationMap = {
     "Mins": "minut",
     "Minutes": "minut",
     "No Slots available": "Žádný volný termín",
-    "People":"lidi",
     "Phone": "Telefon",
     "Phone is required": "Zadejte telefon",
     "Pick a Date and Time": "Vyberte datum a čas",
@@ -157,7 +157,7 @@ const regexTranslationMap = [
     },
     {
         regex: /(\d{1,2}) People/,
-        replacement: (match, people) => `${people} ${translationMap["People"]||people}`
+        replacement: (match, people) => `${people} ${translationMap["Mins"]||people}`
     },
     {
         regex: /(\d{1,2,3}) Mins/,
@@ -285,3 +285,5 @@ const checkForElement = setInterval(() => {
     console.log("Element found:", appElement)
 
 }, 50);
+
+</script>

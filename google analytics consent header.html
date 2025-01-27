@@ -1,0 +1,88 @@
+<!-- Google Tag Manager -->
+<script>
+    (function(w, d, s, l, i) {
+      w[l] = w[l] || [];
+      w[l].push({
+        'gtm.start': new Date().getTime(),
+        event: 'gtm.js',
+      });
+      var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s),
+        dl = l != 'dataLayer' ? '&l=' + l : '';
+      j.async = true;
+      j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-W92TQ95D');
+    </script>
+    <!-- End Google Tag Manager -->
+    
+    <!-- Default Consent State -->
+    <script>
+    (function() {
+      // Load setDefaultConsentState from gtag.js/GTM template
+      const setDefaultConsentState = window.setDefaultConsentState || function(state) {
+        window.dataLayer.push({
+          event: "defaultConsent",
+          ...state,
+        });
+      };
+    
+      // Set the initial default consent state
+      setDefaultConsentState({
+        ad_storage: "denied", // Default ad storage consent
+        analytics_storage: "denied", // Default analytics storage consent
+        functionality_storage: "granted", // Default functionality consent
+        personalization_storage: "denied", // Default personalization consent
+        security_storage: "granted", // Default security consent
+        wait_for_update: 500, // Optional: Wait for user action (in ms)
+      });
+        // Push the gtm.init event for your tag's trigger
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "gtm.init", // Event to trigger Initialization - All Pages
+      });
+    })();
+    </script>
+    
+    <!-- Listen for Cookie Banner Consent Updates -->
+    <script>
+    // Listen for the LCCookieConsentDoneGTag event
+    window.addEventListener(
+      "LCCookieConsentDoneGTag",
+      function(cookieConsent) {
+        // Log the consent event for debugging
+        console.log("LCCookieConsentDoneGTag event:", cookieConsent);
+    
+        // Extract the consent details from the event
+        const consent = cookieConsent?.detail;
+    
+        // Check if gtag is 'grant', indicating all consent is granted
+        const isConsentGranted = consent?.gtag === "grant";
+    
+        // Map the consent state to match gtag/GTM expectations
+        const consentState = {
+          ad_storage: isConsentGranted ? "granted" : "denied",
+          ad_user_data: isConsentGranted ? "granted" : "denied",
+          ad_personalization: isConsentGranted ? "granted" : "denied",
+          analytics_storage: isConsentGranted ? "granted" : "denied",
+          functionality_storage: isConsentGranted ? "granted" : "denied",
+          personalization_storage: isConsentGranted ? "granted" : "denied",
+          security_storage: isConsentGranted ? "granted" : "denied",
+        };
+    
+        // Use updateConsentState if available, otherwise fallback to dataLayer push
+        const updateConsentState = window.updateConsentState || function(state) {
+          window.dataLayer.push({
+            event: "updateConsent",
+            ...state,
+          });
+        };
+    
+        // Update consent state
+        updateConsentState(consentState);
+    
+        console.log("Consent updated:", consentState);
+      },
+      false
+    );
+    </script>

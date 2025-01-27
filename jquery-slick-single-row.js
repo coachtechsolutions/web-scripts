@@ -97,7 +97,6 @@
      * Reorganize `.c-column` elements and initialize the Slick Slider.
      */
     function initializeSlickSlider() {
-        debugger;
       	debugLog('Slick Slider is initializing...');
         const $row = $('.slick-row');
         let $count = 1;

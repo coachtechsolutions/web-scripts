@@ -1,0 +1,43 @@
+<script>
+    document.addEventListener(
+    "hydrationDone",
+    () => {
+      // Přidání vlastní logiky pro posun hlavičky
+      let lastScrollTop = 0; // Poslední známá pozice posunu
+      let accumulatedScroll = 0; // Akumulovaný posun
+      const header = document.getElementById('section-HjMvcJYuJF'); // Hlavička
+  
+      window.addEventListener('scroll', function () {
+        const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  
+        if (currentScrollTop > lastScrollTop) {
+          // Posouvání dolů
+          if (accumulatedScroll < 0) {
+            accumulatedScroll = 0; // Reset při změně směru
+          }
+          accumulatedScroll += currentScrollTop - lastScrollTop;
+          if (accumulatedScroll > 500) {
+            header.classList.add('cts-sticky-hidden'); // Skrýt hlavičku
+          }
+        } else {
+          // Posouvání nahoru
+          if (accumulatedScroll > 0) {
+            accumulatedScroll = 0; // Reset při změně směru
+          }
+          accumulatedScroll -= lastScrollTop - currentScrollTop;
+          if (accumulatedScroll < -500) {
+            header.classList.remove('cts-sticky-hidden'); // Zobrazit hlavičku
+          }
+        }
+  
+        lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // Zabránění záporným hodnotám
+      });
+    }
+  );
+  </script>
+  .cts-sticky-hidden {
+    transform: translateY(-100%);
+ /* Hlavička se posune mimo obrazovku */
+    transition: transform 0.5s ease-in-out;
+ /* Animace přechodu */
+}
