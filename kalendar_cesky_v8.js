@@ -42,45 +42,66 @@ const translationMap = {
     "PM": "odp.",
     "Additional Information": "Další informace",
     "Available Starting times for": "Dostupné časy ",
+    "Add":"Přidat",
     "Add Services":"Přidat službu",
     "Add to": "Přidat do",
     "Additional_Info": "Je něco, co bych měl vědět předem?",
     "Any Available": "Kdokoliv volný",
+    "Any staff available": "Kdokoliv volný",
+    "Back":"Zpět",
     "Book": "Rezervovat",
     "Book Appointment": "Rezervovat schůzku",
     "Calendar": "Kalendář",
+    "Change time":"Změnit čas",
     "Choose Time Slot": "Vyberte čas",
+    "Choose a service": "Vyberte službu",
+    "Continue":"Pokračovat",
+    "Confirm":"Potvrdit",
     "Duration": "Délka",
     "Email is required": "Zadejte Email",
     "Enter Details": "Vyplňte údaje",
     "First Name": "Křestní jméno",
     "First Name is required": "Zadejte jméno",
+    "Guest":"Host",
     "Guests": "Hosté",
     "Just Me":"Jen já",
     "Last Name": "Příjmení",
     "Last Name is required": "Zadejte příjmení",
     "Load More": "Více",
-    "Mins": "minut",
+    "Mins": "min",
+    "mins": "min",
     "Minutes": "minut",
+    "more guest(s)":"další host(é)",
     "No Slots available": "Žádný volný termín",
+    "people":"lidi",
     "People":"lidi",
     "Phone": "Telefon",
     "Phone is required": "Zadejte telefon",
     "Pick a Date and Time": "Vyberte datum a čas",
     "Please accept the terms and conditions": "Prosím potvrďte souhlas",
     "Schedule Meeting": "Naplánovat schůzku",
+    "Schedule Appointment": "Zarezervovat",
+    "Scheduling appointment":"Probíhá rezervace",
     "Search": "Vyhledat",
     "Select": "Zvolit",
+    "Select different services":"Vybrat jiné služby",
     "Select Date": "Vybrat datum",
     "Select Date & Time": "Vyberte datum a čas",
+    "Select a Date & Time": "Vyberte datum a čas",
+    "Select Staff":"Vybrat zaměstnance",
     "Select time": "Vybrat",
+    "Selected Services":"Vybrané služby",
     "Skip": "Přeskočit",
     "Submit": "Odeslat",
     "Time zone": "Časová zóna",
+    "To maximize the total available slot select this option":"Pro maximalizaci celkového dostupného počtu časových slotů vyberte tuto možnost",
     "Your Meeting has been Scheduled": "Vaše schůzka je naplánovaná",
-    "Your appointment has been scheduled": "Vaše rezervace je hotova"
-};
-
+    "Your appointment has been scheduled": "Vaše rezervace je hotova",
+    "(You)":"(Vy)",
+    "You and":"Vy a ",
+    "With any available staff":"S jakýmkoli dostupným personálem",
+    "with":"s",
+}
 const selectors = [
     '.back-button-container a',
     '.calendars-service-action-container',
@@ -91,6 +112,7 @@ const selectors = [
     '.field-container div input',
     '.selected-date',
     '.selected-day',
+    '.selectedOptionText',
     '.timezone-label',
     'a.add-calendar-button',
     'a.calendar-button span',
@@ -99,8 +121,14 @@ const selectors = [
     'button div',
     'div.booking-info-value',
     'div.booking-info-value span',
+    'div.cal_servicemenu_widgets--service-menu-info div',
     'div.calendar-details-container div span span',
+    'div.calendar-service-staff-main-container div',
     'div.calendars-guests-label',
+    'div.calendars-guests-info',
+    'div.calendars-select-guest-name',
+    'div.calendars-select-guest-service',
+    'div.calendars-selected-service div',
     'div.details-item-step2 h3',
     'div.duration span',
     'div.pick-hours--am h4',
@@ -108,7 +136,12 @@ const selectors = [
     'div.pick-hours--pm h4',
     'div.pick-hours--pm p',
     'div.selected-appointment-date span',
-    'div.service-search-input-container',
+    'div.service-menu-booking-form-right-bottom-container div',
+    'div.service-menu-booking-form-right-top-container div',
+    'div.service-menu-booking-form-right-top-container span',
+    'div.service-menu-confirmation-container div',
+    'div.service-menu-loading-container p',
+    'div.service-search-input-container input',
     'h3 strong',
     'h3.cal-title',
     'h4.label-select-date',
@@ -156,16 +189,16 @@ const regexTranslationMap = [
         }
     },
     {
-        regex: /(\d{1,2}) People/,
-        replacement: (match, people) => `${people} ${translationMap["People"]||people}`
+        regex: /(\d{1,2}) (people|People)/,
+        replacement: (match, number, people) => `${number} ${translationMap[people]||people}`
     },
     {
-        regex: /(\d{1,2,3}) Mins/,
-        replacement: (match, minutes) => `${minutes} ${translationMap["Mins"]||minutes}`
+        regex: /(\d{1,3}) (Mins|mins)/,
+        replacement: (match, mins, smins) => `${mins} ${translationMap[smins]||smins}`
     },
     {
-        regex: /(\d{1,2,3}) Minutes/,
-        replacement: (match, minutes) => `${minutes} ${translationMap["Minutes"]||minutes}`
+        regex: /(\d{1,3}) Minutes/,
+        replacement: (match, minutes) => `${minutes} ${translationMap["Minutes"]||"Minutes"}`
     },
     {
         regex: /^(\w+) (\d{1,2},) (\d{4})/,
@@ -194,7 +227,15 @@ const regexTranslationMap = [
             const calendarTranslation = translationMap[calendar]||calendar;
             return `${provider} ${calendarTranslation}`;
         }
-    }
+    },
+    {
+        regex: /(.*\S)\s(\d+)\s(.*)/,
+        replacement: (match, text1, number, text2) => `${translationMap[text1.trim()]||text1.trim()} ${number} ${translationMap[text2.trim()]||text2.trim()}`
+    },
+    {
+        regex: /(.*?)(\d+)/,
+        replacement: (match, text, number) => `${translationMap[text.trim()]||text.trim()} ${number}`
+    },
 ];
 
 var pkdebug=false;
@@ -222,7 +263,7 @@ const translateOrReplaceNode = (node) => {
                     for (const { regex, replacement } of regexTranslationMap) {
                         text = child.nodeValue;
                         if (regex.test(text)) {
-                            rText=text.replace(regex, replacement);
+                            const rText=text.replace(regex, replacement);
                             if(rText!==child.nodeValue) {
                                 child.nodeValue = rText;
                             }
