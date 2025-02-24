@@ -63,7 +63,7 @@
             $wrap.toggleClass('cts-collapsed cts-expanded');
         });
     }
-
+ 
     /**
      * Check and handle overflowing content in slides.
      */
