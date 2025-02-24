@@ -1,4 +1,4 @@
-   // Debug mode toggle
+   // Debug mode togggle
     const DEBUG_MODE = true;
 
     /**
@@ -26,7 +26,7 @@
     function setEqualHeights() {
         let maxHeight = 0;
         // Reset heights to auto to ensure accurate recalculation
-        $('.ct-slide h1').css('height', 'auto');
+        $('.cts-slide h1').css('height', 'auto');
 
         // Find the maximum height among all slides
         $('.cts-slide h1').each(function () {
@@ -63,7 +63,7 @@
             $wrap.toggleClass('cts-collapsed cts-expanded');
         });
     }
- 
+
     /**
      * Check and handle overflowing content in slides.
      */
