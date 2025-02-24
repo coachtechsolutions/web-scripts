@@ -98,7 +98,7 @@
      */
     function initializeSlickSlider() {
       	debugLog('Slick Slider is initializing...');
-        const $row=$('<div>', { class: 'slick-row' });
+        const $row=$('.cts-row');
         const $ctsSlickRow = $('.cts-slick-row');
         $ctsSlickRow.after($row);
         let $count = 1;
