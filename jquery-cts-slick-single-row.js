@@ -108,6 +108,7 @@
         });
 
         // Remove empty `.inner` containers
+        $row.find('> .inner > span').remove();
         $row.find('> .inner').remove();
 
         // Initialize Slick Slider
