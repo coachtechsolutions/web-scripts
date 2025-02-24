@@ -111,7 +111,7 @@
         //$row.find('> .inner > span').remove();
         //$row.find('> .inner').remove();
         const comment=document.createComment("");
-        $row.find('> .inner > span').replaceWith(comment);
+        $row.find('> .inner ~ span').replaceWith(comment);
         $row.find('> .inner').replaceWith(comment);
 
         // Initialize Slick Slider
