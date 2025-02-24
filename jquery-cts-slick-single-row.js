@@ -121,6 +121,7 @@
                 debugLog('Slick initialized with settings:', slick.options);
                 initializeSlides();
                 setEqualHeights();
+
             });
             $row.on('setPosition', (event, slick) => {
                 $row.attr('data-visible-slides', slick.options.slidesToShow);
@@ -151,12 +152,40 @@
             debugLog('Hydration complete, initializing components...');
             initializeToggleHandlers();
             initializeSlickSlider();
+            const $element = $('.slick-row');
+            const $clone = $element.clone(true); // Clone with event handlers
+        
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.removedNodes.forEach(function(node) {
+                        if (node === $element[0]) {
+                            console.log('Element was removed! Reinserting in the same place...');
+        
+                            // Get previous sibling before removal
+                            const previousSibling = node.previousSibling;
+                            const parent = mutation.target;
+        
+                            if (previousSibling) {
+                                $(previousSibling).after($clone); // Reinsert after previous sibling
+                            } else {
+                                $(parent).prepend($clone); // If no sibling, insert at beginning
+                            }
+                        }
+                    });
+                });
+            });
+            const parent = $element.parent()[0];
+            if (parent) {
+                observer.observe(parent, { childList: true });
+            }
+
         });
     }
 
     /**
      * Load scripts in the correct order and initialize the page.
      */
+    
     loadScript('https://code.jquery.com/jquery-3.6.0.min.js', function () {
         loadScript('https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js', initializeAfterHydration);
     });
