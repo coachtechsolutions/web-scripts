@@ -98,20 +98,21 @@
      */
     function initializeSlickSlider() {
       	debugLog('Slick Slider is initializing...');
-        const $slickRow=$('<div>', { class: 'slick-row' });
-        const $row = $('.cts-slick-row');
+        const $row=$('<div>', { class: 'slick-row' });
+        const $ctsSlickRow = $('.cts-slick-row');
         let $count = 1;
         // Move `.c-column` elements to `.slick-row`
         $row.find('.inner .c-column').each(function () {
             debugLog('Moving column:',$count++, $(this)[0]);
             const wrapped = $(this).wrap('<div class="slick-slide"></div>').parent();
-            wrapped.appendTo($slickRow);
+            wrapped.appendTo($row);
         });
 
         // Remove empty `.inner` containers
         //$row.find('> .inner > span').remove();
         //$row.find('> .inner').remove();
-        $row.addClass('hidden');
+        $ctsSlickRow.addClass('hidden');
+        $ctsSlickRow.after($row);
 
         // Initialize Slick Slider
         try {
