@@ -103,7 +103,7 @@
         $ctsSlickRow.after($row);
         let $count = 1;
         // Move `.c-column` elements to `.slick-row`
-        $row.find('.inner .c-column').each(function () {
+        $ctsSlickRow.find('.inner .c-column').each(function () {
             debugLog('Moving column:',$count++, $(this)[0]);
             const wrapped = $(this).wrap('<div class="slick-slide"></div>').parent();
             wrapped.appendTo($row);
