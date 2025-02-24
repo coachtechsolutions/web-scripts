@@ -100,7 +100,6 @@
       	debugLog('Slick Slider is initializing...');
         const $row=$('.slick-row');
         const $ctsSlickRow = $('.cts-slick-row');
-        $ctsSlickRow.after($row);
         let $count = 1;
         // Move `.c-column` elements to `.slick-row`
         $ctsSlickRow.find('.inner .c-column').each(function () {
@@ -108,7 +107,8 @@
             const wrapped = $(this).wrap('<div class="slick-slide"></div>').parent();
             wrapped.appendTo($row);
         });
-
+        //const $clone=$row.clone();
+        //$ctsSlickRow.after($clone);
         // Remove empty `.inner` containers
         //$row.find('> .inner > span').remove();
         //$row.find('> .inner').remove();
@@ -153,8 +153,6 @@
             initializeToggleHandlers();
             initializeSlickSlider();
             const $element = $('.slick-row');
-            const $clone = $element.clone(true); // Clone with event handlers
-        
             const observer = new MutationObserver(function(mutations) {
                 mutations.forEach(function(mutation) {
                     mutation.removedNodes.forEach(function(node) {
