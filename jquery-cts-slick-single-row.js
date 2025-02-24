@@ -160,16 +160,7 @@
                     mutation.removedNodes.forEach(function(node) {
                         if (node === $element[0]) {
                             console.log('Element was removed! Reinserting in the same place...');
-        
-                            // Get previous sibling before removal
-                            const previousSibling = node.previousSibling;
-                            const parent = mutation.target;
-        
-                            if (previousSibling) {
-                                $(previousSibling).after($clone); // Reinsert after previous sibling
-                            } else {
-                                $(parent).prepend($clone); // If no sibling, insert at beginning
-                            }
+                            initializeSlickSlider();
                         }
                     });
                 });
