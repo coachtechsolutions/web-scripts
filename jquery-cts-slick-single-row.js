@@ -26,17 +26,17 @@
     function setEqualHeights() {
         let maxHeight = 0;
         // Reset heights to auto to ensure accurate recalculation
-        $('.jm-slide h1').css('height', 'auto');
+        $('.ct-slide h1').css('height', 'auto');
 
         // Find the maximum height among all slides
-        $('.jm-slide h1').each(function () {
+        $('.cts-slide h1').each(function () {
             const currentHeight = $(this).outerHeight(true);
             if (currentHeight > maxHeight) {
                 maxHeight = currentHeight;
             }
         });
         // Apply the maximum height to all slides
-        $('.jm-slide h1').css('height', maxHeight + 'px');
+        $('.cts-slide h1').css('height', maxHeight + 'px');
     }
     /**
      * Dynamically load a script and execute a callback when loaded.
@@ -53,10 +53,10 @@
      */
     function initializeToggleHandlers() {
         $(document).on('click', '.cts-expand, .cts-collapse', function () {
-            const $jmslide = $(this).closest('.jm-slide');
+            const $jmslide = $(this).closest('.cts-slide');
             const $expand = $jmslide.find('.cts-expand');
             const $collapse = $jmslide.find('.cts-collapse');
-            const $wrap = $jmslide.find('.jm-wrap');
+            const $wrap = $jmslide.find('.cts-wrap');
 
             $expand.toggle();
             $collapse.toggle();
@@ -69,9 +69,9 @@
      */
     function initializeSlides() {
         let count=1;
-        $('.jm-slide').each(function () {
+        $('.cts-slide').each(function () {
             const $slide = $(this);
-            const $textContainer = $slide.find('.jm-wrap');
+            const $textContainer = $slide.find('.cts-wrap');
             const $expand = $slide.find('.cts-expand');
             const $collapse = $slide.find('.cts-collapse');
 
