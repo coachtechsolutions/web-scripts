@@ -1,5 +1,4 @@
-// if you like the script, you may consider some tip on this link:
-// Thanks :)
+
 const translationMap = {
     "January": "Leden", 
     "February": "Únor", 
