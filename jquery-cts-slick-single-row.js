@@ -109,7 +109,7 @@
 
         // Remove empty `.inner` containers
         $row.find('> .inner > span').remove();
-        $row.find('> .inner').remove();
+        $row.find('> .inner').css("display","none");
 
         // Initialize Slick Slider
         try {
