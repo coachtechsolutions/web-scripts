@@ -1,4 +1,6 @@
-//v10 - Simplified Reliable Version
+//v9 - Can handle pop-ups too 
+const pkdebug=false;
+
 const translationMap = {
     "January": "Leden", 
     "February": "Únor", 
@@ -240,7 +242,9 @@ const regexTranslationMap = [
 
 // Debug function to help us track what's happening
 const debug = (message) => {
-    console.log(`[CalendarTranslator] ${message}`);
+    if (pkdebug) {
+        console.log(`[CalendarTranslator] ${message}`);
+    }
 };
 
 // Your existing translateOrReplaceNode function
