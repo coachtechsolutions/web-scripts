@@ -1,5 +1,4 @@
-
-//v9
+//v10 - Simplified Reliable Version
 const translationMap = {
     "January": "Leden", 
     "February": "Únor", 
@@ -101,7 +100,8 @@ const translationMap = {
     "You and":"Vy a ",
     "With any available staff":"S jakýmkoli dostupným personálem",
     "with":"s",
-}
+};
+
 const selectors = [
     '.back-button-container a',
     '.calendars-service-action-container',
@@ -238,16 +238,15 @@ const regexTranslationMap = [
     },
 ];
 
-var pkdebug=false;
+// Debug function to help us track what's happening
+const debug = (message) => {
+    console.log(`[CalendarTranslator] ${message}`);
+};
+
+// Your existing translateOrReplaceNode function
 const translateOrReplaceNode = (node) => {
     if (!node) return;  
 
-    // Skip nodes that have already been translated
-    //if (node.getAttribute && node.getAttribute('data-translated') === 'true') return;
-    if (pkdebug){
-        debugger;
-        pkdebug=false;
-    }
     if (node.childNodes && node.childNodes.length > 0) {
         node.childNodes.forEach(child => {
             if (child.nodeType === 3) {  // Check if the node is a text node
@@ -256,7 +255,7 @@ const translateOrReplaceNode = (node) => {
                 // Check for static translation
                 if (translationMap[text]) {
                     if (child.nodeValue !== translationMap[text]) {
-                    child.nodeValue = translationMap[text];
+                        child.nodeValue = translationMap[text];
                     }
                 } else {
                     // Check for regex-based dynamic translation
@@ -293,263 +292,321 @@ const translateOrReplaceNode = (node) => {
     }
 };
 
-////new
+// Apply translations to any widget
 const applyTranslations = (container) => {
-    if (!container) return;
-    
-    selectors.forEach(selector => {
-        const elements = container.querySelectorAll(selector);
-        elements.forEach(translateOrReplaceNode);
-    });
-};
-
-// Create an observer for a specific widget container
-const createWidgetObserver = (container) => {
-    if (!container) return null;
-    
-    const observer = new MutationObserver(mutations => {
-        applyTranslations(container);
-    });
-    
-    observer.observe(container, { 
-        childList: true, 
-        subtree: true, 
-        characterData: true
-    });
-    
-    console.log("Widget observer created for:", container);
-    return observer;
-};
-
-// Handle when a popup widget is found
-const handlePopupWidget = (popup) => {
-    if (!popup) return;
-    
-    console.log("Popup widget detected:", popup);
-    
-    // Apply translations immediately
-    applyTranslations(popup);
-    
-    // Create dedicated observer for popup content
-    createWidgetObserver(popup);
-};
-
-// Main observer setup that will run for the entire page lifecycle
-const setupPersistentObserver = () => {
-    // First get the Vue root if it exists
-    const vueRoot = document.getElementById('__nuxt');
-    const targetContainer = vueRoot || document.body;
-    
-    console.log("Setting up persistent observer on:", targetContainer.tagName + (vueRoot ? '#__nuxt' : ''));
-    
-    // First find and handle any existing booking widgets
-    findAndHandleExistingWidgets();
-    
-    // Create a persistent observer that will never disconnect
-    const persistentObserver = new MutationObserver(mutations => {
-        for (const mutation of mutations) {
-            if (mutation.type !== 'childList') continue;
-            
-            // Check newly added nodes for our targets
-            for (const node of mutation.addedNodes) {
-                if (node.nodeType !== 1) continue; // Skip non-element nodes
-                
-                // Check if this is the overlay
-                if (node.id === 'overlay') {
-                    handleOverlay(node);
-                    continue;
-                }
-                
-                // Check if this might contain our overlay
-                if (node.querySelector) {
-                    const overlay = node.querySelector('#overlay');
-                    if (overlay) {
-                        handleOverlay(overlay);
-                        continue;
-                    }
-                }
-                
-                // Also check for booking widgets in the main content
-                checkForBookingWidgets(node);
-            }
-        }
-    });
-    
-    // Start observing - we need subtree here since elements could appear anywhere
-    persistentObserver.observe(targetContainer, { 
-        childList: true, 
-        subtree: true,
-        attributes: false,  // Don't need attribute changes for detection
-        characterData: false // Don't need text changes for detection
-    });
-    
-    console.log("Persistent observer is now running");
-};
-
-// Check for booking widgets in a node
-const checkForBookingWidgets = (node) => {
-    if (!node || node.nodeType !== 1) return;
-    
-    const widgetSelectors = [
-        '#appointment_widgets--revamp',
-        '#hl_widget',
-        '#cal_servicemenu_widgets'
-    ];
-    
-    // Check if the node itself is a booking widget
-    for (const selector of widgetSelectors) {
-        if (node.matches && node.matches(selector)) {
-            console.log(`Found booking widget: ${selector}`);
-            applyTranslations(node);
-            createWidgetObserver(node);
-            return;
-        }
-    }
-    
-    // Check children if this node might contain a booking widget
-    if (node.querySelector) {
-        for (const selector of widgetSelectors) {
-            const widget = node.querySelector(selector);
-            if (widget) {
-                console.log(`Found booking widget: ${selector}`);
-                applyTranslations(widget);
-                createWidgetObserver(widget);
-            }
-        }
-    }
-};
-
-// Handle when an overlay is found
-const handleOverlay = (overlay) => {
-    if (!overlay) return;
-    
-    console.log("Overlay detected:", overlay);
-    
-    // Check if popup exists inside overlay
-    const popup = overlay.querySelector('#hl_main_popup');
-    if (popup) {
-        handlePopupWidget(popup);
+    if (!container) {
+        debug('Container is null in applyTranslations');
         return;
     }
     
-    // If no popup yet, observe the overlay for it to appear
-    const overlayObserver = new MutationObserver(mutations => {
-        for (const mutation of mutations) {
-            if (mutation.type !== 'childList') continue;
-            
-            for (const node of mutation.addedNodes) {
-                if (node.nodeType !== 1) continue;
-                
-                if (node.id === 'hl_main_popup') {
-                    handlePopupWidget(node);
-                    return;
-                }
-                
-                // Also check children if this is a container
-                if (node.querySelector) {
-                    const popup = node.querySelector('#hl_main_popup');
-                    if (popup) {
-                        handlePopupWidget(popup);
-                        return;
-                    }
-                }
-            }
+    debug(`Applying translations to ${container.id || container.tagName}`);
+    
+    selectors.forEach(selector => {
+        try {
+            const elements = container.querySelectorAll(selector);
+            elements.forEach(translateOrReplaceNode);
+        } catch (e) {
+            debug(`Error with selector ${selector}: ${e.message}`);
         }
     });
-    
-    overlayObserver.observe(overlay, {
-        childList: true,
-        subtree: true // Check children in case popup is nested
-    });
-    
-    // Disconnect this observer when overlay is removed
-    const disconnectWhenRemoved = setInterval(() => {
-        if (!document.body.contains(overlay)) {
-            overlayObserver.disconnect();
-            clearInterval(disconnectWhenRemoved);
-            console.log("Overlay removed, observer disconnected");
-        }
-    }, 1000); // Check every second if overlay still exists
 };
 
-// Find and handle any widgets that already exist on the page
-const findAndHandleExistingWidgets = () => {
-    const widgetSelectors = [
-        '#appointment_widgets--revamp',
-        '#hl_widget',
-        '#cal_servicemenu_widgets'
-    ];
+// Main translation engine - keeps track of all widgets and observers
+class CalendarTranslator {
+    constructor() {
+        this.observers = [];
+        this.initialized = false;
+        this.knownWidgetIds = new Set();
+        
+        debug('Calendar Translator created');
+    }
     
-    let foundWidget = false;
+    // Initialize the translator
+    init() {
+        if (this.initialized) return;
+        
+        debug('Initializing Calendar Translator');
+        
+        // Find existing widgets
+        this.findAndHandleAllWidgets();
+        
+        // Set up main observer for document body
+        this.setupMainObserver();
+        
+        this.initialized = true;
+        debug('Calendar Translator initialized');
+    }
     
-    widgetSelectors.forEach(selector => {
-        const widgets = document.querySelectorAll(selector);
-        widgets.forEach(widget => {
-            foundWidget = true;
-            console.log(`Found existing booking widget: ${selector}`);
-            applyTranslations(widget);
-            createWidgetObserver(widget);
+    // Find all widgets currently on the page
+    findAndHandleAllWidgets() {
+        debug('Looking for existing widgets');
+        
+        // Calendar widget IDs
+        const widgetSelectors = [
+            '#appointment_widgets--revamp',
+            '#hl_widget',
+            '#cal_servicemenu_widgets'
+        ];
+        
+        let found = 0;
+        
+        // Check for each possible widget ID
+        widgetSelectors.forEach(selector => {
+            const widgets = document.querySelectorAll(selector);
+            widgets.forEach(widget => {
+                found++;
+                this.handleWidget(widget);
+            });
         });
-    });
-    
-    // Also check for existing overlay
-    const overlay = document.getElementById('overlay');
-    if (overlay) {
-        handleOverlay(overlay);
+        
+        // Check for overlay
+        const overlay = document.getElementById('overlay');
+        if (overlay) {
+            debug('Found existing overlay');
+            this.handleOverlay(overlay);
+            found++;
+        }
+        
+        debug(`Found ${found} widget elements`);
+        return found > 0;
     }
     
-    return foundWidget;
-};
+    // Handle a widget when found
+    handleWidget(widget) {
+        if (!widget || !widget.id || this.knownWidgetIds.has(widget.id)) return;
+        
+        debug(`Handling widget: ${widget.id}`);
+        this.knownWidgetIds.add(widget.id);
+        
+        // Apply translations immediately
+        applyTranslations(widget);
+        
+        // Set up observer
+        this.observeWidget(widget);
+    }
+    
+    // Handle an overlay when found
+    handleOverlay(overlay) {
+        debug('Handling overlay');
+        
+        // Check for popup inside overlay
+        const popup = overlay.querySelector('#hl_main_popup');
+        if (popup) {
+            debug('Found popup inside overlay');
+            this.handlePopup(popup);
+        } else {
+            debug('No popup found in overlay, setting up observer');
+            // Observe overlay for popup appearance
+            this.observeOverlay(overlay);
+        }
+    }
+    
+    // Handle popup when found
+    handlePopup(popup) {
+        debug('Handling popup');
+        
+        // Find widgets inside popup
+        const widgetSelectors = [
+            '#appointment_widgets--revamp',
+            '#hl_widget',
+            '#cal_servicemenu_widgets'
+        ];
+        
+        let foundWidget = false;
+        
+        // Look for known widget types in popup
+        for (const selector of widgetSelectors) {
+            const widget = popup.querySelector(selector);
+            if (widget) {
+                debug(`Found ${selector} inside popup`);
+                this.handleWidget(widget);
+                foundWidget = true;
+            }
+        }
+        
+        // If no standard widget found, treat the popup itself as a widget
+        if (!foundWidget) {
+            debug('No standard widget found in popup, treating popup as widget');
+            applyTranslations(popup);
+            this.observeWidget(popup);
+        }
+    }
+    
+    // Set up the main document observer
+    setupMainObserver() {
+        debug('Setting up main document observer');
+        
+        const observer = new MutationObserver((mutations) => {
+            let foundNewOverlay = false;
+            let foundNewWidget = false;
+            
+            for (const mutation of mutations) {
+                if (mutation.type !== 'childList') continue;
+                
+                // Check added nodes
+                for (const node of mutation.addedNodes) {
+                    if (node.nodeType !== 1) continue; // Skip non-element nodes
+                    
+                    // Check if this is an overlay
+                    if (node.id === 'overlay') {
+                        debug('Main observer detected overlay');
+                        this.handleOverlay(node);
+                        foundNewOverlay = true;
+                    }
+                    
+                    // Also check for any widgets that might have been added
+                    if (node.querySelector) {
+                        // Check for overlay in this subtree
+                        if (!foundNewOverlay) {
+                            const overlay = node.querySelector('#overlay');
+                            if (overlay) {
+                                debug('Main observer detected overlay in subtree');
+                                this.handleOverlay(overlay);
+                                foundNewOverlay = true;
+                            }
+                        }
+                        
+                        // Check for calendar widgets
+                        if (!foundNewWidget) {
+                            const widgetSelectors = [
+                                '#appointment_widgets--revamp',
+                                '#hl_widget',
+                                '#cal_servicemenu_widgets'
+                            ];
+                            
+                            for (const selector of widgetSelectors) {
+                                // Check if node itself matches
+                                if (node.matches && node.matches(selector)) {
+                                    debug(`Main observer detected widget: ${selector}`);
+                                    this.handleWidget(node);
+                                    foundNewWidget = true;
+                                    break;
+                                }
+                                
+                                // Check children
+                                const widgets = node.querySelectorAll(selector);
+                                if (widgets.length > 0) {
+                                    widgets.forEach(widget => {
+                                        debug(`Main observer detected widget in subtree: ${selector}`);
+                                        this.handleWidget(widget);
+                                        foundNewWidget = true;
+                                    });
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Use document.documentElement (html) to catch all changes including Vue root
+        observer.observe(document.documentElement, {
+            childList: true,
+            subtree: true,
+            attributes: false,
+            characterData: false
+        });
+        
+        this.observers.push(observer);
+        debug('Main observer started');
+    }
+    
+    // Observe a widget for changes
+    observeWidget(widget) {
+        if (!widget) return null;
+        
+        debug(`Creating observer for widget: ${widget.id || widget.tagName}`);
+        
+        const observer = new MutationObserver(mutations => {
+            debug(`Widget mutation detected in ${widget.id || widget.tagName}`);
+            applyTranslations(widget);
+        });
+        
+        observer.observe(widget, {
+            childList: true,
+            subtree: true,
+            characterData: true
+        });
+        
+        this.observers.push(observer);
+        return observer;
+    }
+    
+    // Observe overlay for popup appearance
+    observeOverlay(overlay) {
+        if (!overlay) return;
+        
+        debug('Creating observer for overlay');
+        
+        const observer = new MutationObserver(mutations => {
+            for (const mutation of mutations) {
+                if (mutation.type !== 'childList') continue;
+                
+                for (const node of mutation.addedNodes) {
+                    if (node.nodeType !== 1) continue;
+                    
+                    if (node.id === 'hl_main_popup') {
+                        debug('Overlay observer detected popup');
+                        this.handlePopup(node);
+                        break;
+                    }
+                    
+                    // Also check children if this might be a wrapper
+                    if (node.querySelector) {
+                        const popup = node.querySelector('#hl_main_popup');
+                        if (popup) {
+                            debug('Overlay observer detected popup in subtree');
+                            this.handlePopup(popup);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+        
+        observer.observe(overlay, {
+            childList: true,
+            subtree: true,
+            attributes: false,
+            characterData: false
+        });
+        
+        this.observers.push(observer);
+        
+        // Clean up observer when overlay is removed
+        const checkInterval = setInterval(() => {
+            if (!document.body.contains(overlay)) {
+                observer.disconnect();
+                this.observers = this.observers.filter(obs => obs !== observer);
+                clearInterval(checkInterval);
+                debug('Overlay removed, observer cleaned up');
+            }
+        }, 1000);
+    }
+}
 
-// Start the script
+// Create and start the translator
 (function() {
-    console.log("Calendar widget translation script starting");
+    debug('Starting Calendar Translator script');
     
-    // Try to set up observers immediately
+    // Create the translator instance
+    const translator = new CalendarTranslator();
+    
+    // Start the translator based on document readiness
     if (document.readyState === 'loading') {
-        // If document not fully loaded, wait for DOMContentLoaded
-        document.addEventListener('DOMContentLoaded', setupPersistentObserver);
+        debug('Document still loading, waiting for DOMContentLoaded');
+        document.addEventListener('DOMContentLoaded', () => {
+            debug('DOMContentLoaded fired, initializing translator');
+            translator.init();
+        });
     } else {
-        // If document already loaded, set up observers now
-        setupPersistentObserver();
+        debug('Document already loaded, initializing translator immediately');
+        translator.init();
     }
+    
+    // Add a global reference for debugging
+    window.calendarTranslator = translator;
+    
+    debug('Calendar Translator script initialized');
 })();
-
-
-
-////old 
-/*
-const applyTranslations = () => {
-    selectors.forEach(selector => {
-        document.querySelectorAll(selector).forEach(translateOrReplaceNode);
-    });
-};
-
-const observer = new MutationObserver(mutations => {
-    mutations.forEach(mutation => {
-        applyTranslations();
-    });
-});
-
-const checkForElement = setInterval(() => {
-    let appElement = document.querySelector('#appointment_widgets--revamp');
-    if (appElement) {
-        clearInterval(checkForElement);
-        applyTranslations();
-        observer.observe(appElement, { childList: true, subtree: true, characterData: true});
-        return;
-    } else appElement = document.querySelector('#hl_widget');
-    if (appElement) {
-        clearInterval(checkForElement);
-        applyTranslations();
-        observer.observe(appElement, { childList: true, subtree: true, characterData: true});
-    } else appElement = document.querySelector('#cal_servicemenu_widgets');
-    if (appElement) {
-        clearInterval(checkForElement);
-        applyTranslations();
-        observer.observe(appElement, { childList: true, subtree: true, characterData: true});
-    }
-    console.log("Element found:", appElement)
-
-}, 50);
-*/
