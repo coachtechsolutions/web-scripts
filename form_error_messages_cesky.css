@@ -1,0 +1,44 @@
+/* Křestní jméno */
+*[id*="_first_name_"] #error-container {
+  visibility: hidden;
+  position: relative;
+}
+
+*[id*="_first_name_"] #error-container::before {
+  content: "Prosím zadejte Vaše křestní jméno";
+  visibility: visible;
+  position: absolute;
+  left: 0;
+  top: 0;
+  text-wrap: wrap;
+}
+
+/* E-mail */
+*[id*="_email_"] #error-container {
+  visibility: hidden;
+  position: relative;
+}
+
+*[id*="_email_"] #error-container::before {
+  content: "Prosím zadejte Váš e-mail";
+  visibility: visible;
+  position: absolute;
+  left: 0;
+  top: 0;
+  text-wrap: wrap;
+}
+
+/* Souhlas se zásadami */
+*[id*="_terms_and_conditions_"] #error-container {
+  visibility: hidden;
+  position: relative;
+}
+
+*[id*="_terms_and_conditions_"] #error-container::before {
+  content: "Prosím odsouhlaste zásady zpracování";
+  visibility: visible;
+  position: absolute;
+  left: 0;
+  top: 0;
+  text-wrap: wrap;
+}
