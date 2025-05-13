@@ -1,10 +1,11 @@
-#el_ea9vC7uFhFffHTa2m1hW_gj0bfbf3dK739EX26msi_1 #error-container {
+/* Křestní jméno */
+*[id*="_first_name_"] #error-container {
   visibility: hidden;
   position: relative;
 }
 
-#el_ea9vC7uFhFffHTa2m1hW_gj0bfbf3dK739EX26msi_1 #error-container::before {
-  content: "Prosím vyplňte jméno obdarované(ho)";
+*[id*="_first_name_"] #error-container::before {
+  content: "Prosím zadejte Vaše křestní jméno";
   visibility: visible;
   position: absolute;
   left: 0;
@@ -12,13 +13,14 @@
   text-wrap: wrap;
 }
 
-#el_ea9vC7uFhFffHTa2m1hW_5v6BVxzX3edJkzxyv3Sr_2 #error-container {
+/* E-mail */
+*[id*="_email_"] #error-container {
   visibility: hidden;
   position: relative;
 }
 
-#el_ea9vC7uFhFffHTa2m1hW_5v6BVxzX3edJkzxyv3Sr_2 #error-container::before {
-  content: "Prosím berte alespoň jednu možnost";
+*[id*="_email_"] #error-container::before {
+  content: "Prosím zadejte Váš e-mail";
   visibility: visible;
   position: absolute;
   left: 0;
@@ -26,85 +28,17 @@
   text-wrap: wrap;
 }
 
-#el_ea9vC7uFhFffHTa2m1hW_nK1qBF1jSFfRcAeZBg3S_3 #error-container {
+/* Souhlas se zásadami */
+*[id*="_terms_and_conditions_"] #error-container {
   visibility: hidden;
   position: relative;
 }
 
-#el_ea9vC7uFhFffHTa2m1hW_nK1qBF1jSFfRcAeZBg3S_3 #error-container::before {
-  content: "Prosím vyplňte Vaše telefonní číslo";
+*[id*="_terms_and_conditions_"] #error-container::before {
+  content: "Prosím odsouhlaste zásady zpracování";
   visibility: visible;
   position: absolute;
   left: 0;
   top: 0;
   text-wrap: wrap;
-}
-#el_ea9vC7uFhFffHTa2m1hW_1eqEjA7cSRzSHdobhgHT_4 #error-container {
-  visibility: hidden;
-  position: relative;
-}
-
-#el_ea9vC7uFhFffHTa2m1hW_1eqEjA7cSRzSHdobhgHT_4 #error-container::before {
-  content: "Prosím vyberte způsob dodání";
-  visibility: visible;
-  position: absolute;
-  left: 0;
-  top: 0;
-  text-wrap: wrap;
-}
-
-#el_ea9vC7uFhFffHTa2m1hW_wUAOH3pCtXhrETT9esLi_5 #error-container {
-    visibility: hidden;
-    position: relative;
-  }
-  
-#el_ea9vC7uFhFffHTa2m1hW_wUAOH3pCtXhrETT9esLi_5 #error-container::before {
-content: "Prosím zadejte ulici a číslo";
-visibility: visible;
-position: absolute;
-left: 0;
-top: 0;
-text-wrap: wrap;
-}
-
-#el_ea9vC7uFhFffHTa2m1hW_qQlLT1PA5HyG5TJ317Y3_6 #error-container {
-    visibility: hidden;
-    position: relative;
-  }
-  
-#el_ea9vC7uFhFffHTa2m1hW_qQlLT1PA5HyG5TJ317Y3_6 #error-container::before {
-content: "Prosím zadejte město";
-visibility: visible;
-position: absolute;
-left: 0;
-top: 0;
-text-wrap: wrap;
-}
-
-#el_ea9vC7uFhFffHTa2m1hW_aYKr1miK5JGJjdwlNW55_7 #error-container {
-    visibility: hidden;
-    position: relative;
-  }
-  
-#el_ea9vC7uFhFffHTa2m1hW_aYKr1miK5JGJjdwlNW55_7 #error-container::before {
-content: "Prosím zadejte PSČ";
-visibility: visible;
-position: absolute;
-left: 0;
-top: 0;
-text-wrap: wrap;
-}
-
-#el_ea9vC7uFhFffHTa2m1hW_8sKDZw1Pttqb1Pfye5ul_8 #error-container {
-    visibility: hidden;
-    position: relative;
-  }
-  
-#el_ea9vC7uFhFffHTa2m1hW_8sKDZw1Pttqb1Pfye5ul_8 #error-container::before {
-content: "Prosím zadejte Váš e-mail";
-visibility: visible;
-position: absolute;
-left: 0;
-top: 0;
-text-wrap: wrap;
 }
