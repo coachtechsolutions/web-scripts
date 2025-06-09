@@ -53,7 +53,7 @@ const selectors = [
     'button',
     'a.blog-back-button span',
     'span.blog-read-time',
-    'span.blog-publich-date'
+    'span.blog-publish-date'
 ];
 
 const regexTranslationMap = [
