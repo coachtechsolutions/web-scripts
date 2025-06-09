@@ -50,7 +50,7 @@ const translationMap = {
 };
 
 const selectors = [
-    '.hl-blog-content-back-top-container button',
+    'button',
     'a.blog-back-button span',
     'span.blog-read-time',
     'span.blog-publich-date'
