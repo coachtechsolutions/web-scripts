@@ -42,7 +42,7 @@ const translationMap = {
     "Mins": "min",
     "mins": "min",
     "Minutes": "minut",
-    "Back to top": "Na začátek",
+    "Back to Top": "Na začátek",
     "Back to Blog": "Zpět na blog",
     "Previous": "Předchozí",
     "Next": "Následující",
