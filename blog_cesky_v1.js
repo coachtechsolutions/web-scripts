@@ -54,7 +54,9 @@ const selectors = [
     'button',
     'a.blog-back-button span',
     'span.blog-read-time',
-    'span.blog-publish-date'
+    'span.blog-publish-date',
+    '.blog-button',
+
 ];
 
 const regexTranslationMap = [
@@ -253,7 +255,8 @@ class BlogTranslator {
         
         const widgetSelectors = [
             '.c-blog-post',
-            '.c-blog-content'
+            '.c-blog-content',
+            '.c-blog-pinned-post'
         ];
         
         let found = 0;
