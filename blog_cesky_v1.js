@@ -47,7 +47,8 @@ const translationMap = {
     "Previous": "Předchozí",
     "Next": "Následující",
     "Published on": "Zveřejněno",
-    "Read more":"Číst dále",
+    "Read more":"Číst dál",
+    "Read More":"Číst dál"
 };
 
 const selectors = [
