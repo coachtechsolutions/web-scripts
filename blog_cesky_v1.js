@@ -256,7 +256,7 @@ class BlogTranslator {
         const widgetSelectors = [
             '.c-blog-post',
             '.c-blog-content',
-            '.c-blog-pinned-post'
+            '.c-blog-pined-post'
         ];
         
         let found = 0;
