@@ -246,7 +246,7 @@ class BlogTranslator {
         this.setupMainObserver();
         
         this.initialized = true;
-        debug('Blog Translator initialized');
+        debug('Blog Translator initialized'); 
     }
     
     // Find all blog elements currently on the page
