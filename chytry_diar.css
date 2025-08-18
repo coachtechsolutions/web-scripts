@@ -1,0 +1,23 @@
+/* === AUTO: DO NOT EDIT BETWEEN :is( … ) MANUALLY === */
+.sidebar-v2-location:is(
+.t27w9GhrWjmDj6o1gD3B
+) {
+  .hl_settings--body .col-md-3[data-v-62af193f]:not(:first-of-type) { display: none; }
+  #tb_linkedin-form-fields-mapping, #tb_tiktok-form-fields-mapping, #tb_facebook-form-fields-mapping { display:none; }
+  #sb_brand-boards { display: none; }
+  #sb_location-mobile-app {display: none; }
+  .cursor-text.divider{ display:none; }
+  #sb_business_info { display: none; }
+  #sb_saas-billing { display: none; }
+  #sb_location-email-services { display: none; }
+  #sb_phone-number { display: none; }
+  #sb_whatsapp { display: none; }
+  #sb_objects { display: none; }
+  #sb_custom-fields-settings { display: none; }
+  #sb_custom-values { display: none; }
+  #sb_conversations_providers { display: none; } 
+  [id="sb_AI Agents"] {display:none;}
+  #sb_, #sb_automation {display:none}
+  #sb_reporting {display:none}
+
+}
