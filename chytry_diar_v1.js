@@ -46,7 +46,7 @@ const translationMap = {
     "Add":"Přidat",
     "Add Services":"Přidat službu",
     "Add to": "Přidat do",
-    "Additional_Info": "Je něco, co bych měl vědět předem?",
+    "Additional_Info": "Sem případně napište Vaše požadavky nebo upřesnění k rezervaci.",
     "Any Available": "Kdokoliv volný",
     "Any staff available": "Kdokoliv volný",
     "Back":"Zpět",
